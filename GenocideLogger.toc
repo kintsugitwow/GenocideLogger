@@ -1,0 +1,8 @@
+## Interface: 11200
+## Title: Genocide Logger
+## Notes: Stores amount of units that died in combat log proximity and groups them by name. Units are grouped by zone the player was in while death occured.
+## Author: Kintsugi <Moments>
+## Version: 1.0
+## SavedVariablesPerCharacter: GENOCIDE_LOGGER_STATUS
+
+GenocideLogger.lua
