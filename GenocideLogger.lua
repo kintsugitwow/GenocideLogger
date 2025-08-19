@@ -46,6 +46,10 @@ local function CleanZoneText(zoneText)
 end
 
 
+local function GetZoneName(zone)
+    return tostring((GENOCIDE_LOGGER_STATUS.ZoneNames[zone] or zone) or "")
+end
+
 
 ------------------------------------------------------------------------------------------------
 -------------------------------------------- EVENTS --------------------------------------------
@@ -143,6 +147,7 @@ local function IsCmd(cmd, input)
 end
 
 
+
 local function CmdListZones(msg)
     local cmd = { "zones", "listzones" }
     local args = MsgArgs(msg, 1)
@@ -151,7 +156,7 @@ local function CmdListZones(msg)
 
     local index = 1
     for zoneName, zone in GENOCIDE_LOGGER_STATUS.Zones do
-        Print(tostring(index) .. ". \124cff00ffff[" .. tostring(GENOCIDE_LOGGER_STATUS.ZoneNames[zoneName]) .. "]\124r")
+        Print(tostring(index) .. ". \124cff00ffff[" .. GetZoneName(zoneName) .. "]\124r")
         index = index + 1
     end
 
@@ -167,7 +172,7 @@ local function CmdStatus(msg)
     Print("\124cff00ffffTotal score: \124r" .. tostring(GENOCIDE_LOGGER_STATUS.Total))
 
     for zoneName, zone in GENOCIDE_LOGGER_STATUS.Zones do
-        Print("\124cff00ffff[" .. GENOCIDE_LOGGER_STATUS.ZoneNames[zoneName] .. "]\124r status:")
+        Print("\124cff00ffff[" .. GetZoneName(zoneName) .. "]\124r status:")
         Print("\124cff00ff00Total: \124r " .. tostring(zone.Total))
 
         for unitName, unit in zone.Units do
@@ -190,7 +195,7 @@ local function CmdZoneStatus(msg)
         return true
     end
 
-    Print("\124cff00ffff[" .. GENOCIDE_LOGGER_STATUS.ZoneNames[zone] .. "]\124r status:")
+    Print("\124cff00ffff[" .. GetZoneName(zone) .. "]\124r status:")
     Print("\124cff00ff00Total: \124r " .. tostring(GENOCIDE_LOGGER_STATUS.Zones[zone].Total))
 
     for k, v in GENOCIDE_LOGGER_STATUS.Zones[zone].Units do
@@ -230,7 +235,7 @@ local function CmdZoneReset(msg)
         return true
     end
 
-    Print("Reseting zone data...", 1, 0.5, 0)
+    Print("Reseting " .. GetZoneName(zone) .. " data...", 1, 0.5, 0)
 
     GENOCIDE_LOGGER_STATUS.Total = GENOCIDE_LOGGER_STATUS.Total - GENOCIDE_LOGGER_STATUS.Zones[zone].Total
     for name, unit in GENOCIDE_LOGGER_STATUS.Zones[zone].Units do
@@ -250,7 +255,7 @@ local function CmdExport(msg)
     local content = "Total score: " .. tostring(GENOCIDE_LOGGER_STATUS.Total) .. "\n\n"
 
     for zoneName, zone in GENOCIDE_LOGGER_STATUS.Zones do
-        content = content .. "["..GENOCIDE_LOGGER_STATUS.ZoneNames[zoneName] .. "] status:\n"
+        content = content .. "["..GetZoneName(zoneName) .. "] status:\n"
         content = content .. "Total: " .. tostring(zone.Total) .. "\n"
     
         for unitName, unit in zone.Units do
@@ -291,7 +296,7 @@ local function CmdZoneExport(msg)
         return true
     end
 
-    local content = "[" .. GENOCIDE_LOGGER_STATUS.ZoneNames[zone] .. "] status:\n"
+    local content = "[" .. GetZoneName(zone) .. "] status:\n"
     content = content .. "Total: " .. tostring(GENOCIDE_LOGGER_STATUS.Zones[zone].Total) .. "\n"
 
     for unitName, unit in GENOCIDE_LOGGER_STATUS.Zones[zone].Units do
@@ -307,7 +312,7 @@ local function CmdZoneExport(msg)
         dateTable.min,
         dateTable.sec)
 
-    local filename = "GenocideLogger_" .. time .. "_" .. GENOCIDE_LOGGER_STATUS.ZoneNames[zone]
+    local filename = "GenocideLogger_" .. time .. "_" .. GetZoneName(zone)
     local result = ExportFile(filename, content)
     if (result == 1) then
         Print("Export saved as \124cff00ff00" .. filename .. "\124r.")
