@@ -143,6 +143,22 @@ local function IsCmd(cmd, input)
 end
 
 
+local function CmdListZones(msg)
+    local cmd = { "zones", "listzones" }
+    local args = MsgArgs(msg, 1)
+    if (not IsCmd(cmd, args[1])) then return false end
+    Print("Zones:")
+
+    local index = 1
+    for zoneName, zone in GENOCIDE_LOGGER_STATUS.Zones do
+        Print(tostring(index) .. ". \124cff00ffff[" .. tostring(GENOCIDE_LOGGER_STATUS.ZoneNames[zoneName]) .. "]\124r")
+        index = index + 1
+    end
+
+    return true
+end
+
+
 local function CmdStatus(msg)
     local cmd = { "status" }
     local args = MsgArgs(msg, 1)
@@ -221,22 +237,6 @@ local function CmdZoneReset(msg)
         GENOCIDE_LOGGER_STATUS.Units[name].Count = GENOCIDE_LOGGER_STATUS.Units[name].Count - unit.Count
     end
     GENOCIDE_LOGGER_STATUS.Zones[zone] = nil
-
-    return true
-end
-
-
-local function CmdListZones(msg)
-    local cmd = { "zones", "listzones" }
-    local args = MsgArgs(msg, 1)
-    if (not IsCmd(cmd, args[1])) then return false end
-    Print("Zones:")
-
-    local index = 1
-    for k, v in GENOCIDE_LOGGER_STATUS.Zones do
-        Print(tostring(index) .. ". \124cff00ffff[" .. tostring(k) .. "]\124r")
-        index = index + 1
-    end
 
     return true
 end
